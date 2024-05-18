@@ -5,6 +5,7 @@ import {
   getCurrentPinnedToLocalStorage,
   setCurrentPinnedToLocalStorage,
 } from "./utils";
+import { SearchData } from "./types";
 
 function App() {
   //TO-DO
@@ -21,13 +22,14 @@ function App() {
   9. remove any and strictly type the app
   */
 
-  const [added, setAdded] = useState([]);
+  const [added, setAdded] = useState<SearchData[]>([]);
 
   useEffect(() => {
     const persistingData = getCurrentPinnedToLocalStorage();
     if (!Object.keys(added).length && persistingData) {
       setAdded(JSON.parse(persistingData));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const currentlyDragging = useRef<number>(0);
@@ -46,7 +48,7 @@ function App() {
       <Search added={added} setAdded={setAdded} />
       <div className="main__container">
         <div className="result__container">
-          {added.map((item: any, index: number) => (
+          {added.map((item: SearchData, index: number) => (
             <div
               draggable
               onDragStart={() => (currentlyDragging.current = index)}

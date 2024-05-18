@@ -1,7 +1,8 @@
+import { AdditionalInfoGenerated, WeatherTableProps } from "../../types";
 import { formatTime } from "../../utils";
 import styles from "./table.module.css";
 
-const WeatherTable = ({ data }: any) => {
+const WeatherTable = ({ data }: WeatherTableProps) => {
   return (
     <table className={styles.table}>
       <thead>
@@ -15,7 +16,7 @@ const WeatherTable = ({ data }: any) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((entry: any, index: any) => (
+        {data.map((entry: AdditionalInfoGenerated, index: number) => (
           <tr key={index}>
             <td>{entry.time}</td>
             <td>{entry.temperature_2m_max}</td>

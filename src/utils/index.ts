@@ -1,6 +1,8 @@
+import { DailyObj } from "../types";
+
 const debounce = (cb: Function, delay: number = 200) => {
-  let timeoutId: any;
-  return (...args: any) => {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  return (...args: any[]) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       cb(...args);
@@ -26,13 +28,13 @@ function formatTime(timeString: string) {
   return `${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
-function mergeArraysToObject(arrays: any) {
+function mergeArraysToObject(arrays: DailyObj) {
   const keys = Object.keys(arrays);
   const mergedArray = [];
 
   for (let i = 0; i < arrays[keys[0]].length; i++) {
     const obj: any = {};
-    keys.forEach((key) => {
+    keys.forEach((key: string | number) => {
       obj[key] = arrays[key][i];
     });
     mergedArray.push(obj);

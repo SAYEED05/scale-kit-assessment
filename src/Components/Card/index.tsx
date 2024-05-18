@@ -7,10 +7,17 @@ import {
 } from "../../utils";
 import { ReactComponent as Close } from "./close-circle.svg";
 import WeatherTable from "../WeatherTable";
-const Card = ({ data, setAdded }: any) => {
-  const [details, setDetails] = useState<any>({});
-  const [isHovering, setisHovering] = useState(false);
-  const [showMore, setShowMore] = useState(false);
+import {
+  AdditionalInfoGenerated,
+  CardProps,
+  SearchData,
+  WeatherData,
+} from "../../types";
+
+const Card = ({ data, setAdded }: CardProps) => {
+  const [details, setDetails] = useState<WeatherData | null>(null);
+  const [isHovering, setisHovering] = useState<boolean>(false);
+  const [showMore, setShowMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchForecastDetails = async () => {
@@ -30,8 +37,8 @@ const Card = ({ data, setAdded }: any) => {
   };
 
   const handleRemove = (): void => {
-    setAdded((prev: any) => {
-      const filtered = prev.filter((item: any) => item.id !== data.id);
+    setAdded((prev: SearchData[]) => {
+      const filtered = prev.filter((item: SearchData) => item.id !== data.id);
       setCurrentPinnedToLocalStorage(JSON.stringify(filtered));
       return filtered;
     });
@@ -39,9 +46,10 @@ const Card = ({ data, setAdded }: any) => {
 
   useEffect(() => {
     fetchForecastDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const additionalInfo = useMemo(
+  const additionalInfo: AdditionalInfoGenerated[] = useMemo(
     () => (details?.daily ? mergeArraysToObject(details?.daily) : []),
     [details]
   );

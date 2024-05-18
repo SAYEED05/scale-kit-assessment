@@ -2,9 +2,10 @@ import React, { useRef, useState } from "react";
 import { debounce, setCurrentPinnedToLocalStorage } from "../../utils";
 import { URL } from "../../utils/constants";
 import styles from "./search.module.css";
-const Search = ({ added, setAdded }: any) => {
-  const [searchResult, setSearchResult] = useState<any[]>([]);
-  const inputRef = useRef<any>(null);
+import { SearchData, SearchProps } from "../../types";
+const Search = ({ added, setAdded }: SearchProps) => {
+  const [searchResult, setSearchResult] = useState<SearchData[]>([]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const fetchSearchResult = async (value: string) => {
     try {
@@ -21,8 +22,8 @@ const Search = ({ added, setAdded }: any) => {
     fetchSearchResult(e.target.value);
   }, 250);
 
-  const handleAdd = (item: any) => {
-    setAdded((prev: any) => {
+  const handleAdd = (item: SearchData): void => {
+    setAdded((prev: SearchData[]) => {
       return [...prev, item];
     });
     setCurrentPinnedToLocalStorage(JSON.stringify([...added, item]));
@@ -32,13 +33,14 @@ const Search = ({ added, setAdded }: any) => {
     }
   };
 
-  const isAlreadyInList = (id: number) => {
-    return added.some((item: any) => item.id === id);
+  console.log(searchResult, "searchResult");
+
+  const isAlreadyInList = (id: number): boolean => {
+    return added.some((item: SearchData) => item.id === id);
   };
 
   return (
     <div className={styles.search__wrapper}>
-      {/* <label htmlFor="search">Search</label> */}
       <input
         id="search"
         type="search"
@@ -50,7 +52,7 @@ const Search = ({ added, setAdded }: any) => {
       />
       {!!searchResult?.length && !!inputRef?.current?.value && (
         <div className={styles.result_wrapper}>
-          {searchResult?.map((item: any) => {
+          {searchResult?.map((item: SearchData) => {
             return (
               <div className={styles.result__item}>
                 <div>
