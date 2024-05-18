@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { debounce, setCurrentPinnedToLocalStorage } from "../../utils";
 import { URL } from "../../utils/constants";
 import styles from "./search.module.css";
 const Search = ({ added, setAdded }: any) => {
   const [searchResult, setSearchResult] = useState<any[]>([]);
+  const inputRef = useRef<any>(null);
 
   const fetchSearchResult = async (value: string) => {
     try {
@@ -20,6 +21,17 @@ const Search = ({ added, setAdded }: any) => {
     fetchSearchResult(e.target.value);
   }, 250);
 
+  const handleAdd = (item: any) => {
+    setAdded((prev: any) => {
+      return [...prev, item];
+    });
+    setCurrentPinnedToLocalStorage(JSON.stringify([...added, item]));
+    if (inputRef?.current?.value) {
+      inputRef.current.value = "";
+      setSearchResult([]);
+    }
+  };
+
   const isAlreadyInList = (id: number) => {
     return added.some((item: any) => item.id === id);
   };
@@ -34,34 +46,31 @@ const Search = ({ added, setAdded }: any) => {
         className={styles.input}
         onChange={debouncedSearch}
         placeholder="Search any cities,places,etc.."
+        ref={inputRef}
       />
-      <div className={styles.result_wrapper}>
-        {searchResult?.map((item: any) => {
-          return (
-            <div className={styles.result__item}>
-              <div>
-                {item.name}, {item?.country} ({item.country_code})
+      {!!searchResult?.length && !!inputRef?.current?.value && (
+        <div className={styles.result_wrapper}>
+          {searchResult?.map((item: any) => {
+            return (
+              <div className={styles.result__item}>
+                <div>
+                  {item.name}, {item?.country} ({item.country_code})
+                </div>
+                {!isAlreadyInList(item.id) ? (
+                  <button
+                    className={styles.add__button}
+                    onClick={() => handleAdd(item)}
+                  >
+                    Add
+                  </button>
+                ) : (
+                  <div>Pinned</div>
+                )}
               </div>
-              {!isAlreadyInList(item.id) ? (
-                <button
-                  onClick={() => {
-                    setAdded((prev: any) => {
-                      return [...prev, item];
-                    });
-                    setCurrentPinnedToLocalStorage(
-                      JSON.stringify([...added, item])
-                    );
-                  }}
-                >
-                  Add
-                </button>
-              ) : (
-                <div>Pinned</div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

@@ -18,7 +18,7 @@ function App() {
   6.make search result on top of other content
   7.implement metric change
   8.implement context
-  9. Strictly type it
+  9. remove any and strictly type the app
   */
 
   const [added, setAdded] = useState([]);
@@ -54,6 +54,7 @@ function App() {
               onDragOver={(e) => e.preventDefault()}
               onDragEnd={handleSort}
               key={item.id}
+              className="card__outer"
             >
               <Card data={item} setAdded={setAdded} />
             </div>

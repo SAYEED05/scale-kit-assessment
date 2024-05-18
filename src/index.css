@@ -25,3 +25,7 @@ body {
   flex-wrap: wrap;
   gap: 20px;
 }
+
+.card__outer {
+  width: 100%;
+}

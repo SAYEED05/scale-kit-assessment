@@ -16,6 +16,8 @@
   background-color: #ffffff;
   color: #000000;
   width: 500px;
+  height: 300px;
+  overflow-y: scroll;
 }
 
 .result__item {
@@ -23,4 +25,11 @@
   border-bottom: 1px solid #000000;
   display: flex;
   justify-content: space-between;
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
+}
+.add__button {
+  padding: 4px 20px;
 }
