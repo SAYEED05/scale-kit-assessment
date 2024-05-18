@@ -1,0 +1,56 @@
+.card__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.weather__card {
+  background: #3c52ad;
+  position: relative;
+  padding: 20px;
+  min-height: 400px;
+  background: #3c52ad;
+  border-radius: 16px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+  cursor: grab;
+}
+
+.temprature {
+  font-size: 40px;
+  font-weight: 500;
+}
+.remove__button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.other__parameters {
+  width: 100%;
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.other__parameters__values {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.place__name {
+  font-size: 24px;
+}
+
+.show__more__card {
+  margin-top: 20px;
+  border: 1px solid #ffffff;
+}
