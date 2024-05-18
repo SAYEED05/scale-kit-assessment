@@ -9,11 +9,16 @@ import {
 function App() {
   //TO-DO
   /* 
-  1.Get And Use Data From API,
-  2.Create a skeleton card
-  3.Implement Add Functionality
-  4.Implement Drag and re-order Functionality
-  5.Improve Style
+  1.Get And Use Data From API, - DONE
+  2.Create a skeleton card - DONE
+  3.Implement Add Functionality - DONE
+  4.Implement Drag and re-order Functionality - DONE
+  5.Improve Style - WIP
+
+  6.make search result on top of other content
+  7.implement metric change
+  8.implement context
+  9. Strictly type it
   */
 
   const [added, setAdded] = useState([]);

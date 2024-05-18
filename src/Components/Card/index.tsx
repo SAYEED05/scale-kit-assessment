@@ -22,6 +22,7 @@ const Card = ({ data, setAdded }: any) => {
       const result = await res.json();
       setDetails(result);
     } catch (error) {
+      window.alert("Forecast API Failed, please try again later");
       console.log("FETCH_DETAILS_ERROR-->", error);
     } finally {
       setIsLoading(false);

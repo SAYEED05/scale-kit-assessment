@@ -11,6 +11,7 @@ const Search = ({ added, setAdded }: any) => {
       const data = await res.json();
       setSearchResult(data?.results);
     } catch (error) {
+      window.alert("Search API Failed, please try again later");
       console.log(`SEARCH_ERROR-->${error}`);
     }
   };
@@ -36,28 +37,27 @@ const Search = ({ added, setAdded }: any) => {
       />
       <div className={styles.result_wrapper}>
         {searchResult?.map((item: any) => {
-          console.log(item, "searchResult");
           return (
             <div className={styles.result__item}>
               <div>
                 {item.name}, {item?.country} ({item.country_code})
               </div>
-              <button
-                onClick={() => {
-                  if (isAlreadyInList(item.id)) {
-                    window.alert("Already Added");
-                  } else {
+              {!isAlreadyInList(item.id) ? (
+                <button
+                  onClick={() => {
                     setAdded((prev: any) => {
                       return [...prev, item];
                     });
                     setCurrentPinnedToLocalStorage(
                       JSON.stringify([...added, item])
                     );
-                  }
-                }}
-              >
-                Add
-              </button>
+                  }}
+                >
+                  Add
+                </button>
+              ) : (
+                <div>Pinned</div>
+              )}
             </div>
           );
         })}
