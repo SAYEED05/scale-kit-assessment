@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import styles from "./card.module.css";
 import { URL } from "../../utils/constants";
 import {
   mergeArraysToObject,
+  metricConversion,
   setCurrentPinnedToLocalStorage,
 } from "../../utils";
 import { ReactComponent as Close } from "./close-circle.svg";
@@ -13,28 +14,36 @@ import {
   SearchData,
   WeatherData,
 } from "../../types";
+import { useData } from "../../Provider/DataProvider";
+import Loading from "./Loading";
+import Error from "./Error";
 
 const Card = ({ data, setAdded }: CardProps) => {
   const [details, setDetails] = useState<WeatherData | null>(null);
-  const [isHovering, setisHovering] = useState<boolean>(false);
-  const [showMore, setShowMore] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDetailsLoading, setIsDetailsLoading] = useState<boolean>(false);
+  const [isDetailsError, setIsDetailsError] = useState<boolean>(false);
 
-  const fetchForecastDetails = async () => {
+  const [isHovering, setisHovering] = useState<boolean>(false);
+
+  //if should show only one show more,use id to identify and only expand that particular component
+  const [showMore, setShowMore] = useState<boolean>(false);
+  const { currentMeasurementSystem } = useData();
+
+  const fetchForecastDetails = useCallback(async () => {
+    setIsDetailsLoading(true);
     try {
-      setIsLoading(true);
       const res = await fetch(
         `${URL.FORECAST}?latitude=${data.latitude}&longitude=${data.longitude}&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,rain_sum&current=temperature_2m,relative_humidity_2m,is_day,rain,precipitation,weather_code,wind_speed_10m&timezone=auto`
       );
       const result = await res.json();
       setDetails(result);
     } catch (error) {
-      window.alert("Forecast API Failed, please try again later");
-      console.log("FETCH_DETAILS_ERROR-->", error);
+      console.log(`FETCH_DETAILS_FOR_${data.name}ERROR-->`, error);
+      setIsDetailsError(true);
     } finally {
-      setIsLoading(false);
+      setIsDetailsLoading(false);
     }
-  };
+  }, [data]);
 
   const handleRemove = (): void => {
     setAdded((prev: SearchData[]) => {
@@ -45,7 +54,9 @@ const Card = ({ data, setAdded }: CardProps) => {
   };
 
   useEffect(() => {
-    fetchForecastDetails();
+    if (!isDetailsError) {
+      fetchForecastDetails();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,8 +65,8 @@ const Card = ({ data, setAdded }: CardProps) => {
     [details]
   );
 
-  if (isLoading) return <div>Loading Weather Details for {data.name}</div>;
-  if (!details) return null;
+  if (isDetailsLoading) return <Loading name={data.name} />;
+  if (isDetailsError || !details) return <Error name={data.name} />;
 
   return (
     <div className={styles.card__wrapper}>
@@ -67,18 +78,26 @@ const Card = ({ data, setAdded }: CardProps) => {
       >
         <div className={styles.place__name}>{data.name}</div>
         <div className={styles.temprature}>
-          {details?.current?.temperature_2m}&deg;C
+          {metricConversion({
+            type: "temperature",
+            measurementSystem: currentMeasurementSystem,
+            val: details?.current?.temperature_2m,
+          })}
         </div>
         <div className={styles.other__parameters}>
           <div>
             <span className={styles.other__parameters__values}>
-              {details?.current?.wind_speed_10m} km/h
+              {metricConversion({
+                type: "distance",
+                measurementSystem: currentMeasurementSystem,
+                val: details?.current?.wind_speed_10m,
+              })}
             </span>
             <div>Wind</div>
           </div>
           <div>
             <span className={styles.other__parameters__values}>
-              {details?.current?.relative_humidity_2m}
+              {details?.current?.relative_humidity_2m}%
             </span>
             <div>Humidity</div>
           </div>

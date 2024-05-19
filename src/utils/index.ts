@@ -1,4 +1,8 @@
-import { DailyObj } from "../types";
+import {
+  DailyObj,
+  MeasurementSystemtypes,
+  MetricConversionArgs,
+} from "../types";
 
 const debounce = (cb: Function, delay: number = 200) => {
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -43,10 +47,46 @@ function mergeArraysToObject(arrays: DailyObj) {
   return mergedArray;
 }
 
+const _distanceConversion = (
+  kmph: number,
+  measurementSystem: MeasurementSystemtypes
+) => {
+  if (measurementSystem === "metric") {
+    return `${kmph} km/h`;
+  }
+  const milesPerKm = 0.621371;
+  const mph = kmph * milesPerKm;
+  return `${mph.toFixed(2)} mph`;
+};
+
+const _temperatureConversion = (
+  celsius: number,
+  measurementSystem: MeasurementSystemtypes
+) => {
+  if (measurementSystem === "metric") {
+    return `${celsius}°C`;
+  }
+  const fahrenheit = (celsius * 9) / 5 + 32;
+  return `${fahrenheit.toFixed(1)}°F`;
+};
+
+const metricConversion = ({
+  type,
+  val,
+  measurementSystem,
+}: MetricConversionArgs): string => {
+  if (type === "distance") {
+    return _distanceConversion(val, measurementSystem);
+  } else {
+    return _temperatureConversion(val, measurementSystem);
+  }
+};
+
 export {
   debounce,
   setCurrentPinnedToLocalStorage,
   getCurrentPinnedToLocalStorage,
   formatTime,
   mergeArraysToObject,
+  metricConversion,
 };

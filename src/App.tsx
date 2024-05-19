@@ -6,24 +6,11 @@ import {
   setCurrentPinnedToLocalStorage,
 } from "./utils";
 import { SearchData } from "./types";
+import MeasurementSystemSelect from "./Components/MeasurementSystemSelect";
+import { DataProvider } from "./Provider/DataProvider";
 
 function App() {
-  //TO-DO
-  /* 
-  1.Get And Use Data From API, - DONE
-  2.Create a skeleton card - DONE
-  3.Implement Add Functionality - DONE
-  4.Implement Drag and re-order Functionality - DONE
-  5.Improve Style - WIP
-
-  6.make search result on top of other content
-  7.implement metric change
-  8.implement context
-  9. remove any and strictly type the app
-  */
-
   const [added, setAdded] = useState<SearchData[]>([]);
-
   useEffect(() => {
     const persistingData = getCurrentPinnedToLocalStorage();
     if (!Object.keys(added).length && persistingData) {
@@ -44,26 +31,29 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <Search added={added} setAdded={setAdded} />
-      <div className="main__container">
-        <div className="result__container">
-          {added.map((item: SearchData, index: number) => (
-            <div
-              draggable
-              onDragStart={() => (currentlyDragging.current = index)}
-              onDragEnter={() => (currentlyDraggingOver.current = index)}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnd={handleSort}
-              key={item.id}
-              className="card__outer"
-            >
-              <Card data={item} setAdded={setAdded} />
-            </div>
-          ))}
+    <DataProvider>
+      <div className="app">
+        <MeasurementSystemSelect />
+        <Search added={added} setAdded={setAdded} />
+        <div className="main__container">
+          <div className="result__container">
+            {added.map((item: SearchData, index: number) => (
+              <div
+                draggable
+                onDragStart={() => (currentlyDragging.current = index)}
+                onDragEnter={() => (currentlyDraggingOver.current = index)}
+                onDragOver={(e) => e.preventDefault()}
+                onDragEnd={handleSort}
+                key={item.id}
+                className="card__outer"
+              >
+                <Card data={item} setAdded={setAdded} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </DataProvider>
   );
 }
 

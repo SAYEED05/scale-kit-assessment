@@ -29,3 +29,9 @@ body {
 .card__outer {
   width: 100%;
 }
+
+.metric__select {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}

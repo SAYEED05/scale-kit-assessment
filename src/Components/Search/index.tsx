@@ -13,8 +13,8 @@ const Search = ({ added, setAdded }: SearchProps) => {
       const data = await res.json();
       setSearchResult(data?.results);
     } catch (error) {
-      window.alert("Search API Failed, please try again later");
       console.log(`SEARCH_ERROR-->${error}`);
+      //DO SOMETHING,SO THAT THE USER WILL KNOW SOMETHING WENT WRONG
     }
   };
 
@@ -32,8 +32,6 @@ const Search = ({ added, setAdded }: SearchProps) => {
       setSearchResult([]);
     }
   };
-
-  console.log(searchResult, "searchResult");
 
   const isAlreadyInList = (id: number): boolean => {
     return added.some((item: SearchData) => item.id === id);

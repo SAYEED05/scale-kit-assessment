@@ -2,6 +2,9 @@
   width: 500px;
   height: 80px;
   border-radius: 12px;
+  @media only screen and (max-width: 600px) {
+    width: 80%;
+  }
 }
 
 .search__wrapper {
@@ -18,6 +21,9 @@
   width: 500px;
   height: 300px;
   overflow-y: scroll;
+  @media only screen and (max-width: 600px) {
+    width: 80%;
+  }
 }
 
 .result__item {

@@ -1,15 +1,17 @@
+import { useData } from "../../Provider/DataProvider";
 import { AdditionalInfoGenerated, WeatherTableProps } from "../../types";
-import { formatTime } from "../../utils";
+import { formatTime, metricConversion } from "../../utils";
 import styles from "./table.module.css";
 
 const WeatherTable = ({ data }: WeatherTableProps) => {
+  const { isMetric, currentMeasurementSystem } = useData();
   return (
     <table className={styles.table}>
       <thead>
         <tr>
           <th>Time</th>
-          <th>Max Temp (°C)</th>
-          <th>Min Temp (°C)</th>
+          <th>Max Temp ({isMetric ? "°C" : "°F"})</th>
+          <th>Min Temp ({isMetric ? "°C" : "°F"})</th>
           <th>Sunrise</th>
           <th>Sunset</th>
           <th>Rain Sum (mm)</th>
@@ -19,8 +21,20 @@ const WeatherTable = ({ data }: WeatherTableProps) => {
         {data.map((entry: AdditionalInfoGenerated, index: number) => (
           <tr key={index}>
             <td>{entry.time}</td>
-            <td>{entry.temperature_2m_max}</td>
-            <td>{entry.temperature_2m_min}</td>
+            <td>
+              {metricConversion({
+                type: "temperature",
+                measurementSystem: currentMeasurementSystem,
+                val: entry.temperature_2m_max,
+              })}
+            </td>
+            <td>
+              {metricConversion({
+                type: "temperature",
+                measurementSystem: currentMeasurementSystem,
+                val: entry.temperature_2m_min,
+              })}
+            </td>
             <td>{formatTime(entry.sunrise)}</td>
             <td>{formatTime(entry.sunset)}</td>
             <td>{entry.rain_sum}</td>

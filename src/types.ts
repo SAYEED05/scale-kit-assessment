@@ -88,3 +88,23 @@ export type SearchProps = {
   added: SearchData[];
   setAdded: React.Dispatch<React.SetStateAction<SearchData[]>>;
 };
+
+export type LabelValueObj = {
+  label: string;
+  value: string;
+};
+
+export type MeasurementSystemtypes = "imperial" | "metric";
+
+export type MeasurementSystemSelectProps = {
+  currentMeasurementSystem: MeasurementSystemtypes;
+  setCurrentMeasurementSystem: React.Dispatch<
+    React.SetStateAction<MeasurementSystemtypes>
+  >;
+};
+
+export type MetricConversionArgs = {
+  type: "distance" | "temperature";
+  val: number;
+  measurementSystem: MeasurementSystemtypes;
+};
