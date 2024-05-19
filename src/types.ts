@@ -103,8 +103,10 @@ export type MeasurementSystemSelectProps = {
   >;
 };
 
+export type MetricConversionType = "distance" | "temperature";
+
 export type MetricConversionArgs = {
-  type: "distance" | "temperature";
+  type: MetricConversionType;
   val: number;
   measurementSystem: MeasurementSystemtypes;
 };

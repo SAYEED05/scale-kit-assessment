@@ -75,10 +75,13 @@ const metricConversion = ({
   val,
   measurementSystem,
 }: MetricConversionArgs): string => {
-  if (type === "distance") {
-    return _distanceConversion(val, measurementSystem);
-  } else {
-    return _temperatureConversion(val, measurementSystem);
+  switch (type) {
+    case "distance":
+      return _distanceConversion(val, measurementSystem);
+    case "temperature":
+      return _temperatureConversion(val, measurementSystem);
+    default:
+      return "0";
   }
 };
 
